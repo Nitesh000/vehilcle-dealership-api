@@ -25,13 +25,17 @@ export const createOne = async (collectionName: string, data: any) => {
 };
 
 // NOTE: find records in db
-export const findData = async (collectionName: string, constraints = {}) => {
+export const findData = async (
+  collectionName: string,
+  constraints = {},
+  projection = {}
+) => {
   const client = await MongoClient.connect(url);
   try {
     const db = client.db("vehicle");
     const collection = db.collection(collectionName);
 
-    const result = collection.find(constraints);
+    const result = collection.find(constraints).project(projection);
     const returnData = {
       status: "success",
       data: result,
@@ -80,7 +84,7 @@ export const getDataById = async (collectionName: string, id: string) => {
 // NOTE: find data by some constraints
 export const findByConstraints = async (
   collectionName: string,
-  constraints: {}
+  constraints = {}
 ) => {
   const client = await MongoClient.connect(url);
   try {
